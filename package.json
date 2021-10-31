@@ -1,0 +1,23 @@
+{
+  "name": "bakalarsky-projekt",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.6.2",
+    "moment": "^2.29.1",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-redux": "^7.2.6",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^1.0.0",
+    "esbuild": "^0.13.4",
+    "sass": "^1.43.4",
+    "vite": "^2.6.4"
+  }
+}
