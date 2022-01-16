@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
-export const Hour = ({ data, nextHour }) => {
+export const Hour = React.memo(({ data, nextHour }) => {
   useEffect(() => {
     console.log("RERENDER!");
   }, [data]);
@@ -29,4 +29,4 @@ export const Hour = ({ data, nextHour }) => {
       <strong>{data.subject && data.subject.name}</strong>
     </div>
   );
-};
+});

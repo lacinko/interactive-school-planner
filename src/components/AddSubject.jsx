@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { addSubject } from "../store/slices/subjects";
+import { useDispatch, useSelector } from "react-redux";
+import { saveSubject } from "../store/slices/subjects";
 import "../styles/AddSubject.scss";
+import { Layout } from "./Layout";
 
 export const AddSubject = () => {
+  const user = useSelector((state) => state.user);
   const [subject, setSubject] = useState({
     name: "Ekonomika Podniku",
     day: "Tuesday",
@@ -23,14 +25,17 @@ export const AddSubject = () => {
   };
 
   const submitSubject = () => {
-    dispatch(addSubject({ subject }));
+    dispatch(saveSubject(subject));
   };
 
   useEffect(() => {
-    console.log(subject);
-  }, [subject]);
+    if (user.user === null) {
+      navigate("/login", { replace: true });
+    }
+  }, []);
+
   return (
-    <div className="addSubject">
+    <Layout className="addSubject">
       <input
         type="text"
         value={subject.name}
@@ -109,6 +114,6 @@ export const AddSubject = () => {
       <button onClick={submitSubject} style={{ fontSize: ".8rem" }}>
         ADD NEW SUBJECT
       </button>
-    </div>
+    </Layout>
   );
 };
