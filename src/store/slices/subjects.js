@@ -1,18 +1,67 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { calculateSemester } from "../../logic/apiLogic";
+import { db } from "../../logic/firebaseConfig";
 
 const initialState = {
-  semester: calculateSemester(),
+  semester: null,
   subjects: [],
   message: "",
 };
+
+const loadSemester = createAsyncThunk(
+  "semester/load",
+  async (uid, { dispatch, rejectWithValue, getState }) => {
+    const docRef = doc(db, "semester", uid);
+    const docSnap = await getDoc(docRef);
+    if (Object.keys(docSnap.data()).length === 0) {
+      //console.log("Document data:", docSnap.data());
+      await dispatch(fillSemester());
+      const state = getState();
+      await updateDoc(docRef, state);
+      //console.log("Document data:", docSnap.data());
+    } else {
+      console.log("No such document!");
+      dispatch(getSemester(docSnap.data()));
+    }
+  }
+);
+
+const saveSubject = createAsyncThunk(
+  "subject/save",
+  async (subject, { dispatch, rejectWithValue, getState }) => {
+    dispatch(addSubject({ subject }));
+    const uid = getState().user.user.uid;
+    const state = getState().subjects;
+    console.log(state);
+    const docRef = doc(db, "semester", uid);
+    await updateDoc(docRef, {
+      semester: state.semester,
+      subjects: [...state.subjects],
+    });
+  }
+);
 
 export const subjectsSlice = createSlice({
   name: "subjects",
   initialState,
   reducers: {
+    getSemester: (state, action) => {
+      state.semester = action.payload.semester;
+      state.subjects = action.payload.subjects;
+    },
+    fillSemester: {
+      reducer: (state, action) => {
+        state.semester = action.payload;
+      },
+      prepare: () => {
+        const semester = calculateSemester();
+        return { payload: semester };
+      },
+    },
     addSubject: (state, action) => {
-      const { name, subjectType, occurrence, hour } = action.payload.subject;
+      const { name, subjectType, occurrence, hour, day } =
+        action.payload.subject;
       //ADD SUBJECT TO LIST
       let subjectInList = state.subjects.find(
         (subject) => subject.name === name
@@ -54,6 +103,7 @@ export const subjectsSlice = createSlice({
       if (!subjectInList) {
         state.subjects.push({
           name: name,
+          day: day,
           [subjectType]: { occurrence, hour },
         });
       }
@@ -114,9 +164,27 @@ export const subjectsSlice = createSlice({
         }
       });
     },
+    removeSubject: (state, action) => {
+      state.semester.map((week, idx) => {
+        state.semester[idx][Object.keys(week)[0]].map((day) => {
+          console.log(current(day));
+          if (
+            Object.keys(day)[0].split(",")[0].toLowerCase() ===
+            action.payload.subject.day.toLowerCase()
+          ) {
+            const hourIndex = day[Object.keys(day)].findIndex(
+              (hour) => hour.time === action.payload.subject.hour
+            );
+            day[Object.keys(day)][hourIndex].subject = null;
+            day[Object.keys(day)][hourIndex + 1].subject = null;
+          }
+        });
+      });
+    },
   },
 });
-
-export const { addSubject } = subjectsSlice.actions;
+export { loadSemester, saveSubject };
+export const { addSubject, removeSubject, fillSemester, getSemester } =
+  subjectsSlice.actions;
 
 export default subjectsSlice.reducer;

@@ -1,0 +1,17 @@
+{
+  "short_name": "School Planner",
+  "name": "Interactive School Planner - ISP",
+  "icons": [
+    {
+      "src": "/images/maskable_icon.png",
+      "type": "image/png",
+      "sizes": "1024x1024",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
