@@ -6,27 +6,33 @@ export const Hour = React.memo(({ data, nextHour }) => {
   }, [data]);
   return (
     <div
+      className="border-b-4 border-grey pt-2 flex items-center"
       style={
         data.subject?.subjectType === "Lecture"
           ? {
-              display: "flex",
-              flexDirection: "column",
               border: "2px solid green",
             }
           : data.subject?.subjectType === "Seminar"
           ? {
-              display: "flex",
-              flexDirection: "column",
               border: "2px solid blue",
             }
-          : {
-              display: "flex",
-              flexDirection: "column",
-            }
+          : {}
       }
     >
-      {nextHour ? `${data.time} - ${nextHour.time}` : data.time}
-      <strong>{data.subject && data.subject.name}</strong>
+      {nextHour ? (
+        <span>
+          {data.time} <br /> {nextHour.time}
+        </span>
+      ) : (
+        data.time
+      )}
+      <strong className="px-4">
+        {
+          data.subject && data.subject.name
+          /*.split(" ")
+        .map((word) => <span>{word.substring(0, 1).toUpperCase()}</span>)*/
+        }
+      </strong>
     </div>
   );
 });

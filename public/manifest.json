@@ -3,9 +3,10 @@
   "name": "Interactive School Planner - ISP",
   "icons": [
     {
-      "src": "/images/logo.png",
+      "src": "/images/maskable_icon.png",
       "type": "image/png",
-      "sizes": "1024x1024"
+      "sizes": "1024x1024",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/index.html",

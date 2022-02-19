@@ -2,6 +2,7 @@ import { createSlice, current, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { auth } from "../../logic/firebaseConfig";
 import { db } from "../../logic/firebaseConfig";
@@ -55,18 +56,31 @@ const signInUser = createAsyncThunk(
       .catch((err) => rejectWithValue(err.message));
   }
 );
+const logoutUser = createAsyncThunk(
+  "user/logout",
+  (_, { dispatch, rejectWithValue }) => {
+    return signOut(auth)
+      .then((res) => {
+        dispatch(deleteUser());
+      })
+      .catch((err) => rejectWithValue(err.message));
+  }
+);
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     saveUser: (state, action) => {
-      console.log(action.payload);
       state.user = {
         uid: action.payload.uid,
         email: action.payload.email,
         refreshToken: action.payload.refreshToken,
       };
+    },
+    deleteUser: (state, action) => {
+      state.user = null;
+      state.message = " ";
     },
   },
   extraReducers: (builder) => {
@@ -99,7 +113,7 @@ export const userSlice = createSlice({
   },
 });
 
-export { registerUser, signInUser };
-export const { saveUser } = userSlice.actions;
+export { registerUser, signInUser, logoutUser };
+export const { saveUser, deleteUser } = userSlice.actions;
 
 export default userSlice.reducer;
