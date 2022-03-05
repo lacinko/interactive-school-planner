@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import "./App.css";
 import { Week } from "./components/Week";
 import { auth } from "./logic/firebaseConfig";
-import { onAuthStateChanged } from "firebase/auth";
+import { getIdToken, onAuthStateChanged } from "firebase/auth";
 import { loadSemester } from "./store/slices/subjects";
 import { Layout } from "./components/Layout";
-import db, { getDataFromDB } from "./logic/indexedDB";
 import { navigate } from "@reach/router";
+import { saveUser } from "./store/slices/users";
 
 function App() {
   const semester = useSelector((state) => state.subjects);
@@ -16,8 +16,15 @@ function App() {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
+      getIdToken(auth.currentUser)
+        .then((idToken) => {
+          console.log("ID TOKEN: ", idToken);
+        })
+        .catch((error) => {
+          console.log("ID TOKEN ERROR: ", error);
+        });
       if (user) {
-        //dispatch(saveUser(user.refreshToken));
+        dispatch(saveUser(user.refreshToken));
         semester.semester || dispatch(loadSemester(user.uid));
       } else {
         //dispatch(saveUser(undefined));
@@ -30,7 +37,7 @@ function App() {
     if (semester.semester) {
       //dispatch(saveSemester());
     }
-    getDataFromDB();
+    //getDataFromDB();
   }, [semester]);
 
   useEffect(() => {
