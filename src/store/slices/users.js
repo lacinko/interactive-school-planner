@@ -45,6 +45,7 @@ const signInUser = createAsyncThunk(
       credentials.password
     )
       .then((res) => {
+        window.location.assign("/");
         dispatch(
           saveUser({
             refreshToken: res._tokenResponse.refreshToken,

@@ -1,4 +1,4 @@
-import Dexie from "dexie";
+/*import Dexie from "dexie";
 import { calculateSemester } from "./apiLogic";
 
 const db = new Dexie("ReactDexie");
@@ -34,3 +34,4 @@ export const getDataFromDB = async () => {
 };
 
 saveDataInIndexDB(semester);
+*/
