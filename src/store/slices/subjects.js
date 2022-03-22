@@ -59,6 +59,18 @@ export const subjectsSlice = createSlice({
         return { payload: semester };
       },
     },
+    addHomework: (state, action) => {
+      state.semester.map((first, idx) =>
+        first[`week${idx + 1}`].map((second) =>
+          Object.values(second)[0].map((third, idx) => {
+            if (third.id === action.payload.id) {
+              third.homework = action.payload.homework;
+              console.log(current(third));
+            }
+          })
+        )
+      );
+    },
     addSubject: (state, action) => {
       const { name, subjectType, occurrence, hour, day } =
         action.payload.subject;
@@ -184,7 +196,12 @@ export const subjectsSlice = createSlice({
   },
 });
 export { loadSemester, saveSubject };
-export const { addSubject, removeSubject, fillSemester, getSemester } =
-  subjectsSlice.actions;
+export const {
+  addSubject,
+  removeSubject,
+  fillSemester,
+  getSemester,
+  addHomework,
+} = subjectsSlice.actions;
 
 export default subjectsSlice.reducer;

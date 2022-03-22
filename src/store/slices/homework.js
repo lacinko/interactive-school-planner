@@ -9,15 +9,7 @@ export const homeworkSlice = createSlice({
   initialState,
   reducers: {
     addHomework: (state, action) => {
-      const { id, assignment } = action.payload.homework;
-      const homeworkToAdd = state.find((homework) => homework.id === id);
-      if (homeworkToAdd) {
-        homeworkToAdd = { ...homeworkToAdd, assignment };
-        return;
-      }
-      if (!homeworkToAdd) {
-        state.homework.push({ id, assignment });
-      }
+      state.homework.push(action.payload);
     },
   },
 });

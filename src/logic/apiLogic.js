@@ -35,12 +35,14 @@ const calculateDay = (day) => {
                 .add((duration = duration + 15), "minute")
                 .format("HH:mm"),
               subject: null,
+              homework: null,
             }
           : idx === 0
           ? {
               id: uuidv4(),
               time: moment(day).add(0, "minute").format("HH:mm"),
               subject: null,
+              homework: null,
             }
           : {
               id: uuidv4(),
@@ -48,6 +50,7 @@ const calculateDay = (day) => {
                 .add((duration = duration + 45), "minute")
                 .format("HH:mm"),
               subject: null,
+              homework: null,
             }
       ),
   };

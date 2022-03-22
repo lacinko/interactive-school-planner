@@ -33,6 +33,9 @@ export const Hour = React.memo(({ data, nextHour }) => {
         .map((word) => <span>{word.substring(0, 1).toUpperCase()}</span>)*/
         }
       </strong>
+      <strong className="px-4">
+        {data.homework && `Homework: ${data.homework}`}
+      </strong>
     </div>
   );
 });

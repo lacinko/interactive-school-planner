@@ -12,6 +12,7 @@ const initialState = {
   user: null,
   loading: false,
   message: "",
+  messagingToken: "",
 };
 
 const registerUser = createAsyncThunk(
@@ -45,6 +46,7 @@ const signInUser = createAsyncThunk(
       credentials.password
     )
       .then((res) => {
+        window.location.assign("/");
         dispatch(
           saveUser({
             refreshToken: res._tokenResponse.refreshToken,
@@ -82,6 +84,10 @@ export const userSlice = createSlice({
       state.user = null;
       state.message = " ";
     },
+    saveMessagingToken: (state, action) => {
+      console.log("MSG TOKEN", action.payload);
+      state.messagingToken = action.payload;
+    },
   },
   extraReducers: (builder) => {
     //REGISTER USER
@@ -114,6 +120,6 @@ export const userSlice = createSlice({
 });
 
 export { registerUser, signInUser, logoutUser };
-export const { saveUser, deleteUser } = userSlice.actions;
+export const { saveUser, deleteUser, saveMessagingToken } = userSlice.actions;
 
 export default userSlice.reducer;
